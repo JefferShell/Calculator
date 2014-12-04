@@ -4,6 +4,7 @@ import com.chanjet.calculator.R;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -55,21 +56,25 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.btn_7:
 		case R.id.btn_8:
 		case R.id.btn_9:
-//		case R.id.btn_point:
+		case R.id.btn_point:
+			input.setText(con + ((Button) v).getText());
 			if(clean_flag==true){
 				input.setText("");
+				clean_flag=false;
 			}
-			input.setText(con + ((Button) v).getText());
-			break;
-		case R.id.btn_point:
-			input.setText(clean_flag.toString());
+			if(input.getText().toString().startsWith(".")){
+				input.setText("");
+			}
+			
 			break;
 		case R.id.btn_plus:
 		case R.id.btn_minus:
 		case R.id.btn_multiply:
 		case R.id.btn_divide:
 			if(clean_flag==true){
-				input.setText("");
+//				input.setText("");
+//				con="";
+				clean_flag=false;
 			}
 			input.setText(con + " " + ((Button) v).getText() + "  ");
 			break;
@@ -80,8 +85,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.btn_del:
 			if(clean_flag == true){
 				input.setText("");
+				clean_flag = false;
 			}
-			else if (con != null || con.equals("")) {
+			else if (con != null && !con.equals("")) {
 				input.setText(con.substring(0, con.length() - 1));
 			}
 			break;
@@ -111,6 +117,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 		clean_flag = true;
 		double result = 0;
+		java.text.DecimalFormat   df=new   java.text.DecimalFormat("#.#");   
 		String s1 = exp.substring(0, exp.indexOf(" "));// 运算符前面的字符串
 		String op = exp.substring(exp.indexOf(" ") + 1, exp.indexOf(" ") + 2);// 运算符
 		String s2 = exp.substring(exp.indexOf(" ") + 3);
@@ -142,7 +149,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				int m = (int) result;
 				input.setText(m + "");
 			} else {
-				input.setText(result + "");
+				input.setText(df.format(result) + "");
 			}
 		} else if (!s1.equals("") && s2.equals("")) {
 			input.setText(exp);
@@ -169,7 +176,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				int m = (int) result;
 				input.setText(m + "");
 			} else {
-				input.setText(result + "");
+				input.setText(df.format(result) + "");
 			}
 		}
 		else{
